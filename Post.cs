@@ -53,7 +53,7 @@ namespace BlogFormatter
                 text += "</div>\n";
             }
             File.WriteAllText(path + this.FileName, text);
-            Console.WriteLine(this.ToString());
+            Console.Write(path + this.ToString());
         }
 
         private string JekyllYamlFrontMatter()
@@ -102,7 +102,7 @@ namespace BlogFormatter
 
         private string GetDateStamp()
         {
-            return String.Format("{0:yyyy_MM_dd_}", this.Posted);
+            return String.Format("{0:yyyy-MM-dd-}", this.Posted);
         }
 
         private string KillNonTitleChars(string s)

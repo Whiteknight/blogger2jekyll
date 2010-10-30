@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.IO;
 
 namespace BlogFormatter
 {
@@ -34,10 +35,10 @@ namespace BlogFormatter
 
             Console.WriteLine("Entries: " + posts.Count.ToString());
 
+            if (!Directory.Exists("_posts"))
+                Directory.CreateDirectory("_posts");
             foreach (KeyValuePair<string, Post> kvp in posts)
-                kvp.Value.WriteFile("entries/");
-
-            Console.ReadKey();
+                kvp.Value.WriteFile("_posts/");
         }
 
     }
