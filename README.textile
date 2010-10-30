@@ -1,0 +1,20 @@
+h3. Build
+
+In Mono, you can build like this:
+
+<pre>
+gmcs -r:System.Web.dll -out:Blogger2Jekyll.exe Program.cs Post.cs Comment.cs Author.cs
+</pre>
+
+h3. Run It
+
+To convert a blog:
+
+# Export your blog from Blogger. This will give you a .xml file
+# Run:
+
+<pre>
+Blogger2Jekyll.exe BLOG_XML_FILE
+</pre>
+
+Where BLOG_XML_FILE is the filename of your blogger export XML file.
