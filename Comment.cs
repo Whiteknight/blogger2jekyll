@@ -3,7 +3,7 @@ using System.Web;
 using System.Xml;
 using System.Text.RegularExpressions;
 
-namespace BlogFormatter
+namespace Blogger2Jekyll
 {
     class Comment
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Xml;
 
-namespace BlogFormatter
+namespace Blogger2Jekyll
 {
     class Author
     {

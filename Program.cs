@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.IO;
 
-namespace BlogFormatter
+namespace Blogger2Jekyll
 {
     class Program
     {

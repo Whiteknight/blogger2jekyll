@@ -5,7 +5,7 @@ using System.Xml;
 using System.Web;
 using System.IO;
 
-namespace BlogFormatter
+namespace Blogger2Jekyll
 {
     class Post
     {
