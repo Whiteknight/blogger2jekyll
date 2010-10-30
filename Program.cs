@@ -37,8 +37,10 @@ namespace Blogger2Jekyll
 
             if (!Directory.Exists("_posts"))
                 Directory.CreateDirectory("_posts");
+            if (!Directory.Exists("_posts"))
+                Directory.CreateDirectory("_posts");
             foreach (KeyValuePair<string, Post> kvp in posts)
-                kvp.Value.WriteFile("_posts/");
+                kvp.Value.WriteFile("_posts/", "_drafts/");
         }
 
     }

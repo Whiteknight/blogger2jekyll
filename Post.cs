@@ -14,8 +14,10 @@ namespace Blogger2Jekyll
         public string FileName { get; private set; }
         public string Text { get; private set; }
         public bool ValidPost { get; private set; }
+        public List<string> Categories = new List<string>();
         public List<Comment> Comments = new List<Comment>();
         public DateTime Posted { get; private set; }
+        private bool draft;
 
         public Post(XmlNode node)
         {
@@ -25,7 +27,21 @@ namespace Blogger2Jekyll
             this.Posted = this.GetPostDate(node);
             this.FileName = this.GetPostFileName(node);
             this.Text = HttpUtility.HtmlDecode(node["content"].InnerText);
-            this.Title = node["title"].InnerText;
+            this.Title = this.GetPostDisplayTitle(node);
+            this.GetCategories(node);
+            XmlNode control = node["app:control"];
+            if (control != null && control["app:draft"] != null)
+                this.draft = control["app:draft"].InnerText == "yes";
+        }
+
+        public void GetCategories(XmlNode node)
+        {
+            foreach (XmlNode child in node.ChildNodes) {
+                if (child.LocalName != "category")
+                    continue;
+                if (child.Attributes["scheme"].InnerText == "http://www.blogger.com/atom/ns#")
+                    this.Categories.Add(child.Attributes["term"].InnerText);
+            }
         }
 
         public override string ToString()
@@ -36,8 +52,9 @@ namespace Blogger2Jekyll
             return rep;
         }
 
-        public void WriteFile(string path)
+        public void WriteFile(string pubpath, string draftpath)
         {
+            string path = this.draft ? draftpath : pubpath;
             string text = this.JekyllYamlFrontMatter() + this.Text;
             if (this.Comments.Count > 0) {
                 text += @"
@@ -58,8 +75,19 @@ namespace Blogger2Jekyll
 
         private string JekyllYamlFrontMatter()
         {
-            return "---\nlayout: bloggerpost\ntitle: " + this.Title + "\n---\n\n";
-            // TODO: Categories
+            return @"---
+layout: bloggerpost
+title: " + this.Title + @"
+publish: " + (this.draft ? "false" : "true") + @"
+categories: " + this.FormatYamlCategories() + @"
+---
+
+";
+        }
+
+        private string FormatYamlCategories()
+        {
+            return "[" + String.Join(",", this.Categories.ToArray()) + "]";
         }
 
         public void AddComment(Comment c)
@@ -111,6 +139,12 @@ namespace Blogger2Jekyll
             for (int i = 0; i < evil.Length; i++)
                 s = s.Replace(evil.Substring(i, 1), "");
             return s;
+        }
+
+        private string GetPostDisplayTitle(XmlNode node)
+        {
+            string raw = node["title"].InnerText;
+            return raw.Replace(":", "&#58;");
         }
     }
 }
