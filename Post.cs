@@ -26,12 +26,18 @@ namespace Blogger2Jekyll
                 return;
             this.Posted = this.GetPostDate(node);
             this.FileName = this.GetPostFileName(node);
-            this.Text = HttpUtility.HtmlDecode(node["content"].InnerText);
+            this.Text = this.GetPageText(node);
             this.Title = this.GetPostDisplayTitle(node);
             this.GetCategories(node);
             XmlNode control = node["app:control"];
             if (control != null && control["app:draft"] != null)
                 this.draft = control["app:draft"].InnerText == "yes";
+        }
+
+        private string GetPageText(XmlNode node)
+        {
+            string html = HttpUtility.HtmlDecode(node["content"].InnerText);
+            return html.Replace("{", "&#123;").Replace("}", "&#125;");
         }
 
         public void GetCategories(XmlNode node)

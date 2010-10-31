@@ -26,7 +26,7 @@ namespace Blogger2Jekyll
                 sig += "<a class='blogger-author-uri' href='" + this.Uri + "'>" + this.Name + "</a>\n";
             else
                 sig += this.Name;
-            return sig;
+            return sig + "</span>";
         }
     }
 }

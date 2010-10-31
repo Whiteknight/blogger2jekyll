@@ -14,18 +14,19 @@ namespace Blogger2Jekyll
             doc.Load(args[0]);
             XmlNode root = doc.DocumentElement;
             Dictionary<string, Post> posts = new Dictionary<string, Post>();
+            Dictionary<string, Comment> comments = new Dictionary<string, Comment>();
             foreach (XmlNode entry in root.ChildNodes) {
                 if (entry.LocalName != "entry")
                     continue;
                 if (entry["thr:in-reply-to"] != null) {
                     Comment c = new Comment(entry);
                     string id = c.PostId;
-                    if (posts.ContainsKey(id))
+                    if (posts.ContainsKey(id)) {
                         posts[id].AddComment(c);
-                    else
+                        comments.Add(c.CommentId, c);
+                    } else
                         Console.WriteLine("No post associated with comment " + c.ToString());
-                }
-                else {
+                } else {
                     Post p = new Post(entry);
                     if (!p.ValidPost)
                         continue;
