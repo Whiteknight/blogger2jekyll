@@ -43,6 +43,5 @@ namespace Blogger2Jekyll
             foreach (KeyValuePair<string, Post> kvp in posts)
                 kvp.Value.WriteFile("_posts/", "_drafts/");
         }
-
     }
 }

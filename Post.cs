@@ -93,7 +93,10 @@ categories: " + this.FormatYamlCategories() + @"
 
         private string FormatYamlCategories()
         {
-            return "[" + String.Join(",", this.Categories.ToArray()) + "]";
+            string[] ary = new string[this.Categories.Count];
+            for (int i = 0; i < this.Categories.Count; i++)
+                ary[i] = "'" + this.Categories[i] + "'";
+            return "[" + String.Join(",", ary) + "]";
         }
 
         public void AddComment(Comment c)
@@ -152,5 +155,6 @@ categories: " + this.FormatYamlCategories() + @"
             string raw = node["title"].InnerText;
             return raw.Replace(":", "&#58;");
         }
+
     }
 }
