@@ -42,6 +42,13 @@ namespace Blogger2Jekyll
                 Directory.CreateDirectory("_posts");
             foreach (KeyValuePair<string, Post> kvp in posts)
                 kvp.Value.WriteFile("_posts/", "_drafts/");
+            /*
+            {
+                string links = kvp.Value.GetAllInternalLinks();
+                if (links != null)
+                    Console.WriteLine(links);
+            }
+            */
         }
     }
 }

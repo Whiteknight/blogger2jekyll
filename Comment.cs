@@ -24,7 +24,6 @@ namespace Blogger2Jekyll
             this.Text = HttpUtility.HtmlDecode(node["content"].InnerText);
             this.PostId = this.GetCommentPostIDNumber(node);
             this.CommentId = this.GetCommentId(node);
-            File.WriteAllText("comments/" + this.PostId.ToString() + ".xml", node.InnerXml);
         }
 
         public override string ToString()

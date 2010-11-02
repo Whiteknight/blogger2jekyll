@@ -93,10 +93,7 @@ categories: " + this.FormatYamlCategories() + @"
 
         private string FormatYamlCategories()
         {
-            string[] ary = new string[this.Categories.Count];
-            for (int i = 0; i < this.Categories.Count; i++)
-                ary[i] = "'" + this.Categories[i] + "'";
-            return "[" + String.Join(",", ary) + "]";
+            return "[" + String.Join(", ", this.Categories.ToArray()) + "]";
         }
 
         public void AddComment(Comment c)
@@ -156,5 +153,16 @@ categories: " + this.FormatYamlCategories() + @"
             return raw.Replace(":", "&#58;");
         }
 
+        public string GetAllInternalLinks()
+        {
+            Regex rx = new Regex("href=\"http://wknight8111.blogspot.com/([^\"]+)\"");
+            MatchCollection mc = rx.Matches(this.Text);
+            if (mc.Count == 0)
+                return null;
+            string result = this.FileName + "\n";
+            foreach (Match m in mc)
+                result += "\t" + m.Groups[1].Value + "\n";
+            return result;
+        }
     }
 }
