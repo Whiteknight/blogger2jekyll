@@ -63,8 +63,8 @@ namespace Blogger2Jekyll
 
         public static void Log(string msg)
         {
-            Console.WriteLine(msg);
-            //File.AppendText(LOG_FILE, msg + "\n");
+            //Console.WriteLine(msg);
+            File.AppendAllText(LOG_FILE, msg + "\n");
         }
     }
 }
