@@ -75,7 +75,7 @@ namespace Blogger2Jekyll
                     text += c.OutputHtml();
                 text += "</div>\n";
             }
-            File.WriteAllText(path + this.FileName, text);
+            File.WriteAllText(path + "/" + this.FileName, text);
             Console.Write(path + this.ToString());
         }
 
@@ -153,9 +153,10 @@ categories: " + this.FormatYamlCategories() + @"
             return raw.Replace(":", "&#58;");
         }
 
-        public void UpdateAllInternalLinks(MatchEvaluator replacer)
+        public void UpdateAllInternalLinks(string oldblogbase, MatchEvaluator replacer)
         {
-            Regex rx = new Regex("http://wknight8111.blogspot.com/([^\"]+)");
+            Program.Log("\tPost: " + this.FileName);
+            Regex rx = new Regex(oldblogbase + "([^\"]+)");
             this.Text = rx.Replace(this.Text, replacer);
         }
     }

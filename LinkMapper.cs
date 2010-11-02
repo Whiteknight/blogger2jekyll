@@ -9,11 +9,13 @@ namespace Blogger2Jekyll
         // Map year -> month -> filenames
         private Dictionary<string, Dictionary<string, List<string>>> postmap;
         private string Path;
+        private string CommentPath;
         public MatchEvaluator Replacer;
 
-        public LinkMapper(string path, string[] pages)
+        public LinkMapper(string path, string cpath, string[] pages)
         {
             this.Path = path;
+            this.CommentPath = cpath;
             this.postmap = new Dictionary<string, Dictionary<string, List<string>>>();
             this.Replacer = new MatchEvaluator(this.ResolveLink);
             foreach (string page in pages)
@@ -67,7 +69,6 @@ namespace Blogger2Jekyll
         public string ResolveLink(Match m)
         {
             string link = m.Groups[1].Value;
-            Console.Write("\t" + link + ": ");
             string result = null;
             if (Regex.IsMatch(link, @"^\d{4}/\d{2}/.+#c"))
                 result = this.ResolveCommentLink(link);
@@ -76,11 +77,11 @@ namespace Blogger2Jekyll
             else if (link.Substring(0, 12) == "search/label")
                 result = this.ResolveCategoryLink(link);
             else
-                Console.Write(" Not a valid-looking link ");
+                Program.Log("\t\t" + link + " -> Not a valid-looking link");
             if (result != null)
-                Console.WriteLine(result);
+                Program.Log("\t\t" + link + " -> " + result);
             else
-                Console.WriteLine("FAIL");
+                Program.Log("\t\t" + link + " -> Could not resolve");
             return result;
         }
 
@@ -100,7 +101,7 @@ namespace Blogger2Jekyll
                 }
             }
             if (min == 1000) {
-                Console.Write(" No candidates ");
+                Program.Log("\t\t\tNo candidates");
                 return null;
             }
             return best;
@@ -127,7 +128,7 @@ namespace Blogger2Jekyll
         private string ResolveCategoryLink(string link)
         {
             string[] parts = link.Split('/');
-            return "/categories/" + parts[2] + ".html";
+            return this.CommentPath + "/" + parts[2] + ".html";
         }
     }
 }
