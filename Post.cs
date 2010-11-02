@@ -153,16 +153,10 @@ categories: " + this.FormatYamlCategories() + @"
             return raw.Replace(":", "&#58;");
         }
 
-        public string GetAllInternalLinks()
+        public void UpdateAllInternalLinks(MatchEvaluator replacer)
         {
-            Regex rx = new Regex("href=\"http://wknight8111.blogspot.com/([^\"]+)\"");
-            MatchCollection mc = rx.Matches(this.Text);
-            if (mc.Count == 0)
-                return null;
-            string result = this.FileName + "\n";
-            foreach (Match m in mc)
-                result += "\t" + m.Groups[1].Value + "\n";
-            return result;
+            Regex rx = new Regex("http://wknight8111.blogspot.com/([^\"]+)");
+            this.Text = rx.Replace(this.Text, replacer);
         }
     }
 }

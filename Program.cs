@@ -15,6 +15,7 @@ namespace Blogger2Jekyll
             XmlNode root = doc.DocumentElement;
             Dictionary<string, Post> posts = new Dictionary<string, Post>();
             Dictionary<string, Comment> comments = new Dictionary<string, Comment>();
+            List<string> pages = new List<string>();
             foreach (XmlNode entry in root.ChildNodes) {
                 if (entry.LocalName != "entry")
                     continue;
@@ -31,17 +32,24 @@ namespace Blogger2Jekyll
                     if (!p.ValidPost)
                         continue;
                     posts.Add(p.Id, p);
+                    pages.Add(p.FileName);
                 }
             }
 
-            Console.WriteLine("Entries: " + posts.Count.ToString());
 
-            if (!Directory.Exists("_posts"))
-                Directory.CreateDirectory("_posts");
-            if (!Directory.Exists("_posts"))
-                Directory.CreateDirectory("_posts");
+            Console.WriteLine("Updating Links:");
+            LinkMapper mapper = new LinkMapper("/", pages.ToArray());
             foreach (KeyValuePair<string, Post> kvp in posts)
-                kvp.Value.WriteFile("_posts/", "_drafts/");
+                kvp.Value.UpdateAllInternalLinks(mapper.Replacer);
+
+            Console.WriteLine("Entries: " + posts.Count.ToString());
+            Console.WriteLine("Generated Posts:");
+            if (!Directory.Exists("_posts"))
+                Directory.CreateDirectory("_posts");
+            if (!Directory.Exists("_posts"))
+                Directory.CreateDirectory("_posts");
+            //foreach (KeyValuePair<string, Post> kvp in posts)
+            //    kvp.Value.WriteFile("_posts/", "_drafts/");
             /*
             {
                 string links = kvp.Value.GetAllInternalLinks();
