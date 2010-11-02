@@ -3,7 +3,7 @@ h3. Build
 In Mono, you can build like this:
 
 <pre>
-gmcs -r:System.Web.dll -out:Blogger2Jekyll.exe Program.cs Post.cs Comment.cs Author.cs
+gmcs -r:System.Web.dll -out:Blogger2Jekyll.exe Program.cs Post.cs Comment.cs Author.cs LinkMapper.cs
 </pre>
 
 h3. Run It
