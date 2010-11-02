@@ -76,7 +76,7 @@ namespace Blogger2Jekyll
                 text += "</div>\n";
             }
             File.WriteAllText(path + "/" + this.FileName, text);
-            Console.Write(path + this.ToString());
+            Program.Log(path + "/" + this.FileName);
         }
 
         private string JekyllYamlFrontMatter()

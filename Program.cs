@@ -11,9 +11,10 @@ namespace Blogger2Jekyll
         private const string LOG_FILE = "blogger2jekyll.txt";
         private const string OUTPUT_DIR = "_posts";
         private const string DRAFT_DIR = "_drafts";
-        private const string LINK_BASE = "/";
+        private const string LINK_BASE = "";
         private const string CAT_BASE = "/categories";
         private const string OLDBLOG_BASE = "http://wknight8111.blogspot.com/";
+        private const string PERMALINK_FORMAT = "/:year/:month/:day/:title.html";
 
         static void Main(string[] args)
         {
@@ -48,7 +49,7 @@ namespace Blogger2Jekyll
             Log("\tNumber of entries: " + posts.Count.ToString());
 
             Log("Step 2: Updating links");
-            LinkMapper mapper = new LinkMapper(LINK_BASE, CAT_BASE, pages.ToArray());
+            LinkMapper mapper = new LinkMapper(LINK_BASE, CAT_BASE, PERMALINK_FORMAT, pages.ToArray());
             foreach (KeyValuePair<string, Post> kvp in posts)
                 kvp.Value.UpdateAllInternalLinks(OLDBLOG_BASE, mapper.Replacer);
 

@@ -10,10 +10,12 @@ namespace Blogger2Jekyll
         private Dictionary<string, Dictionary<string, List<string>>> postmap;
         private string Path;
         private string CommentPath;
+        private PermalinkBuilder Linker;
         public MatchEvaluator Replacer;
 
-        public LinkMapper(string path, string cpath, string[] pages)
+        public LinkMapper(string path, string cpath, string format, string[] pages)
         {
+            this.Linker = new PermalinkBuilder(path, format);
             this.Path = path;
             this.CommentPath = cpath;
             this.postmap = new Dictionary<string, Dictionary<string, List<string>>>();
@@ -85,6 +87,12 @@ namespace Blogger2Jekyll
             return result;
         }
 
+        private string GetPermalink(string file)
+        {
+            string[] parts = file.Split('-');
+            return this.Linker.CreatePermalink(parts[0], parts[1], parts[2], parts[3]);
+        }
+
         private string ResolvePostLink(string link)
         {
             string[] parts = link.Split('/');
@@ -104,7 +112,7 @@ namespace Blogger2Jekyll
                 Program.Log("\t\t\tNo candidates");
                 return null;
             }
-            return best;
+            return this.GetPermalink(best);
         }
 
         private string[] GetCandidates(string year, string month)
@@ -122,13 +130,34 @@ namespace Blogger2Jekyll
             string[] parts = link.Split('?');
             string post = this.ResolvePostLink(parts[0]);
             string[] args = parts[1].Split('#');
-            return post + "#" + args[1].Substring(2);
+
+            return post + "#" + args[1].Substring(1);
         }
 
         private string ResolveCategoryLink(string link)
         {
             string[] parts = link.Split('/');
             return this.CommentPath + "/" + parts[2] + ".html";
+        }
+
+        private class PermalinkBuilder
+        {
+            private string format;
+            private string urlbase;
+
+            public PermalinkBuilder(string urlbase, string format)
+            {
+                this.format = format;
+                this.urlbase = urlbase;
+            }
+
+            public string CreatePermalink(string year, string month, string day, string title)
+            {
+                string s = format.Replace(":year", year);
+                s = s.Replace(":month", month);
+                s = s.Replace(":day", day);
+                return this.urlbase + s.Replace(":title", title);
+            }
         }
     }
 }
